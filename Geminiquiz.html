@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logical & Spiritual Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent-blue: #3b82f6;
+      --thought-bg: #f0f9ff;
+      --thought-border: #0284c7;
+      --thought-text: #0369a1;
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Telugu', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      padding: 36px 28px;
+      backdrop-filter: blur(10px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .header p {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    }
+
+    .question-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .question-number {
+      display: inline-block;
+      background: #e0e7ff;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .question-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      position: relative;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      color: #334155;
+      transition: all 0.2s ease;
+      background: #fafafa;
+    }
+
+    .option-label:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+    }
+
+    .option-item input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #94a3b8;
+      border-radius: 50%;
+      margin-right: 14px;
+      outline: none;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .option-item input[type="radio"]:checked {
+      border-color: var(--primary);
+      background-color: var(--primary);
+      box-shadow: inset 0 0 0 3px #ffffff;
+    }
+
+    .option-item input[type="radio"]:checked + .option-label-text {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .option-item input[type="radio"]:checked ~ .option-label {
+      border-color: var(--primary);
+      background: #eeef2a0f;
+    }
+
+    /* Dynamic Thought Box (Bracket Content) */
+    .thought-box {
+      display: none;
+      margin-top: 8px;
+      margin-left: 34px;
+      padding: 12px 16px;
+      background: var(--thought-bg);
+      border-left: 4px solid var(--thought-border);
+      border-radius: 0 8px 8px 0;
+      color: var(--thought-text);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: #dcfce7;
+      color: #16a34a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
+    }
+
+    .success-screen h2 {
+      font-size: 24px;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .success-screen p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="quiz-form-container">
+      <div class="header">
+        <h1>Logical & Spiritual Perspectives</h1>
+        <p>దయచేసి క్రింది ప్రశ్నలను చదివి మీ అభిప్రాయాన్ని తెలియజేయండి.</p>
+      </div>
+
+      <form id="quizForm">
+        <!-- Student Information -->
+        <div class="form-group">
+          <label for="studentName">Your Name *</label>
+          <input type="text" id="studentName" placeholder="ఉదా: రాకేష్ శర్మ" required>
+        </div>
+
+        <div class="form-group">
+          <label for="collegeName">Your College *</label>
+          <input type="text" id="collegeName" placeholder="ఉదా: GEC, Vijayawada" required>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card">
+          <span class="question-number">Question 1</span>
+          <div class="question-title">భూకంపాలు, సునామీలలో చిన్న చిన్న పిల్లలు ఎందుకు చనిపోతున్నారు?</div>
+          <div class="options-grid">
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q1" value="A" data-thought="అంటే దేవునికి Partiality ఉందా?" required>
+                <span class="option-label-text">A) దేవుడు అందరికీ బ్రతకడానికి ఒకే ఆయుష్కాలం ఇవ్వలేదు.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q1" value="B" data-thought="అంటే.. దేవుడి control లో ఇది లేదా?">
+                <span class="option-label-text">B) కేవలం మనుషులు చేసిన తప్పుల వల్లే ఇలా జరుగుతుంది.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q1" value="C" data-thought="అంటే ఆయన - చేయని తప్పుకి శిక్షించే అన్యాయస్థుడా?">
+                <span class="option-label-text">C) తల్లి తండ్రులు చేసిన తప్పులు పిల్లల మీదకి తెప్పిస్తున్నారు.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q1" value="D" data-thought="ఈ ప్రశ్నకు సరైన వివరణ తెలుసుకోవాలనే ఆలోచన ఉంది.">
+                <span class="option-label-text">D) Answer ఏంటో తెలియటం లేదు, నాకు తెలుసుకోవాలనుంది.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card">
+          <span class="question-number">Question 2</span>
+          <div class="question-title">చచ్చిపోయిన వారు తిరిగి వచ్చి మళ్ళీ దెయ్యాలుగా మనుషులలోకి వస్తారా?</div>
+          <div class="options-grid">
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q2" value="A" data-thought="మరి బైబిల్ లో అలా రారు అని ఉందేంటి? - యోబు 7:9 పాతాళమునకు దిగిపోయినవాడు మరి ఎప్పుడునురాడు" required>
+                <span class="option-label-text">A) వస్తారు</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q2" value="B" data-thought="మరి బైబిల్ లో యేసు దెయ్యాలని వెళ్లగొట్టినట్టు ఉందిగా?">
+                <span class="option-label-text">B) రారు</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q2" value="C" data-thought="దీనికి సరైన ఆధ్యాత్మిక వివరణ తెలుసుకోవాలని ఉంది.">
+                <span class="option-label-text">C) Answer ఏంటో తెలియటం లేదు, నాకు తెలుసుకోవాలనుంది.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card">
+          <span class="question-number">Question 3</span>
+          <div class="question-title">Body ని ఇచ్చింది దేవుడే కదా... తప్పు చేయాలనే కోరికలు body లో పెట్టింది కూడా ఆయనేనా?</div>
+          <div class="options-grid">
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q3" value="A" data-thought="అంటే పాపం చేయమని ఆయనే encourage చేసినట్టా?" required>
+                <span class="option-label-text">A) ఆయనే పెట్టారు.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q3" value="B" data-thought="ఆయన పెట్టకుండా Body లో అవన్నీ ఎలా వచ్చాయి?">
+                <span class="option-label-text">B) ఆయన పెట్టలేదు.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q3" value="C" data-thought="ఈ కోరికలను జయించి ఆత్మీయంగా నిలబడే మార్గం తెలుసుకోవాలని ఉంది.">
+                <span class="option-label-text">C) Answer తెలీదు, ఎక్కువగా పడిపోతున్నాను అస్సలు ఈ కోరికలు జయించాలంటే ఏమి చెయ్యాలో తెలుసుకోవాలనుంది.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card">
+          <span class="question-number">Question 4</span>
+          <div class="question-title">దేవుడే ఉంటే... తల్లి HIV patient అయితే ఏ పాపం తెలియని గర్భంలో ఉండే పాప/బాబుకి HIV ఎందుకు వస్తుంది?</div>
+          <div class="options-grid">
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q4" value="A" data-thought="అంటే దేవుడు అన్యాయస్థుడా? - లోకంలో ఉండే కోర్టులే better కదా!!" required>
+                <span class="option-label-text">A) తల్లి చేసిన తప్పుకి పాప/బాబుకి HIV వస్తుంది.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q4" value="B" data-thought="అంటే దేవుడు ఒకరిని ఒకలా, ఇంకొకరిని ఇంకోలా Partiality తో చూస్తారా?">
+                <span class="option-label-text">B) దేవుడే HIV వచ్చేలా చేస్తున్నారు?</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q4" value="C" data-thought="ఈ ప్రశ్నకు దేవుని దృక్పథంలో జవాబు అన్వేషిస్తున్నాను.">
+                <span class="option-label-text">C) Answer ఏంటో తెలియటం లేదు, నాకు తెలుసుకోవాలనుంది.</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 5: Fellowship Continuation -->
+        <div class="question-card" style="background: #f8fafc; border-color: #cbd5e1;">
+          <span class="question-number" style="background: #e2e8f0; color: #475569;">Fellowship Interest</span>
+          <div class="question-title" style="font-size: 16px;">
+            ఈ ప్రశ్నలకు సమాధానాలే కాకుండా, దేవునిలో నిలబడడానికి, ప్రార్థనాపూర్వకంగా నీ లైఫ్ కట్టుకోవడానికి... నీ Career ని డెవలప్ చేసుకునేలా ఈ ఫెలోషిప్‌లో కంటిన్యూ అవ్వాలనిపిస్తే నీ ఇంటరెస్ట్‌ని తెలియజేయవచ్చు:
+          </div>
+          <div class="options-grid">
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q5" value="Interested" data-thought="మీ ఆసక్తికి ధన్యవాదాలు! త్వరలోనే మిమ్మల్ని సంప్రదిస్తాం." required>
+                <span class="option-label-text">A) Interested</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+
+            <div class="option-item">
+              <label class="option-label">
+                <input type="radio" name="q5" value="Not Interested" data-thought="మీ సమయానికి ధన్యవాదాలు.">
+                <span class="option-label-text">B) Not Interested</span>
+              </label>
+              <div class="thought-box"></div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Answers</button>
+      </form>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successScreen" class="success-screen">
+      <div class="success-icon">✓</div>
+      <h2>ధన్యవాదాలు!</h2>
+      <p>మీ రెస్పాన్స్ విజయవంతంగా సబ్మిట్ చేయబడింది.</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+      radioButtons.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          const currentName = e.target.name;
+          const currentCard = e.target.closest('.question-card');
+          
+          // Hide all thought boxes in this question card
+          currentCard.querySelectorAll('.thought-box').forEach(box => {
+            box.style.display = 'none';
+            box.textContent = '';
+          });
+
+          // Show thought box for selected option
+          const thoughtText = e.target.getAttribute('data-thought');
+          if (thoughtText) {
+            const thoughtBox = e.target.closest('.option-item').querySelector('.thought-box');
+            thoughtBox.textContent = `💭 ${thoughtText}`;
+            thoughtBox.style.display = 'block';
+          }
+        });
+      });
+
+      // Handle Form Submission
+      const form = document.getElementById('quizForm');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Hide Form & Show Success Screen
+        document.getElementById('quiz-form-container').style.display = 'none';
+        document.getElementById('successScreen').style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>
